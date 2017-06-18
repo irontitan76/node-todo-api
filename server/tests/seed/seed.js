@@ -5,25 +5,41 @@ const {User} = require('./../../models/user');
 
 const userOneId = new ObjectID();
 const userTwoId = new ObjectID();
-const users = [
-  {_id: userOneId,
-    email: 'test@example.com',
-    password: 'testPassword',
-    tokens: [{
+const users = [{
+  _id: userOneId,
+  email: 'test@example.com',
+  password: 'testPassword',
+  tokens: [{
       access: 'auth',
-      token: jwt.sign({_id: userOneId, access: 'auth'}, 'abc123').toString()
-    }]
-  }, {
-    _id: userTwoId,
-    email: 'test2@example.com',
-    password: 'test2Password'
-  }
-];
+      token: jwt.sign({
+          _id: userOneId,
+          access: 'auth'
+      }, 'abc123').toString()
+  }]
+}, {
+  _id: userTwoId,
+  email: 'test2@example.com',
+  password: 'test2Password',
+  tokens: [{
+      access: 'auth',
+      token: jwt.sign({
+          _id: userTwoId,
+          access: 'auth'
+      }, 'abc123').toString()
+  }]
+}];
 
-const todos = [
-  {_id: new ObjectID(), text: 'First test todo'},
-  {_id: new ObjectID(), text: 'Second test todo', completed: true, completedAt: 333}
-];
+const todos = [{
+  _id: new ObjectID(),
+  text: 'First test todo',
+  _creator: userOneId
+}, {
+  _id: new ObjectID(),
+  text: 'Second test todo',
+  completed: true,
+  completedAt: 333,
+  _creator: userTwoId
+  }];
 
 const populateUsers = (done) => {
   User.remove({}).then(() => {
